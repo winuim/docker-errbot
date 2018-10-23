@@ -144,7 +144,7 @@ BOT_IDENTITY = {}
 
 #slack token
 if 'BOT_TOKEN' in os.environ:
-    BOT_IDENTITY['BOT_TOKEN'] = os.environ.get('BOT_TOKEN') 
+    BOT_IDENTITY['token'] = os.environ.get('BOT_TOKEN') 
 
 # The identity, or credentials, used to connect to a server
 # BOT_IDENTITY = {

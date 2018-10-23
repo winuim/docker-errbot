@@ -5,8 +5,6 @@
 # tags from Docker Hub.
 FROM python:alpine
 
-MAINTAINER "Yohei Uema <winuim@gmail.com>"
-
 # If you prefer miniconda:
 #FROM continuumio/miniconda3
 
@@ -18,17 +16,18 @@ ADD . /app
 
 # Update & Install Requirments Packages.
 RUN apk update && apk upgrade
-RUN apk add vim bash gcc g++ libffi-dev openssl-dev
+RUN apk add tzdata vim bash gcc g++ libffi-dev openssl-dev
+RUN find . -type f -exec chmod -x {} \;
+
+# Setup timezone
+RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN echo "Asia/Tokyo" > /etc/timezone
 
 # Using pip:
 RUN python3 -m pip install -r requirements.txt
-CMD ["sh", "errbot-start.sh"]
 
-# Using pipenv:
-#RUN python3 -m pip install pipenv
-#RUN pipenv install --ignore-pipfile
-#CMD ["pipenv", "run", "python3", "-m", "docker-errbot"]
+# Setup errbot
+RUN mkdir /app/errbot-root && cd /app/errbot-root && errbot --init
 
-# Using miniconda (make sure to replace 'myenv' w/ your environment name):
-#RUN conda env create -f environment.yml
-#CMD /bin/bash -c "source activate myenv && python3 -m docker-errbot"
+# Run
+CMD ["sh", "run.sh"]

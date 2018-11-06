@@ -16,7 +16,7 @@ ADD . /app
 
 # Update & Install Requirments Packages.
 RUN apk update && apk upgrade
-RUN apk add tzdata vim bash gcc g++ libffi-dev openssl-dev
+RUN apk add tzdata vim bash gcc g++ libffi-dev openssl-dev git
 RUN find . -type f -exec chmod -x {} \;
 
 # Setup timezone

@@ -1,4 +1,4 @@
-from errbot import BotPlugin, botcmd, re_botcmd
+from errbot import BotPlugin, botcmd, re_botcmd, arg_botcmd
 from errbot.version import VERSION
 import ptvsd
 import re
@@ -12,7 +12,7 @@ class HelloWorld(BotPlugin):
     def hello(self, msg, args):
         """Say hello to the world"""
         if ptvsd.is_attached():
-            print("Debug Start")
+            # print("Debug Start")
             ptvsd.break_into_debugger()
         return self.hello_helper()
 
@@ -20,7 +20,7 @@ class HelloWorld(BotPlugin):
     def hello_another(self, msg, args):
         """Say hello to the world"""
         if ptvsd.is_attached():
-            print("Debug Start")
+            # print("Debug Start")
             ptvsd.break_into_debugger()
         return self.hello_another_helper()
 
@@ -41,6 +41,9 @@ class HelloWorld(BotPlugin):
         Err: May I have a cookie please?
         Err; cookie please?
         """
+        if ptvsd.is_attached():
+            # print("Debug Start")
+            ptvsd.break_into_debugger()
         yield "Here's a cookie for you, {}".format(msg.frm)
         yield "/me hands out a cookie."
 
@@ -48,18 +51,19 @@ class HelloWorld(BotPlugin):
         pattern=r"(^| )cookies?( |$)", prefixed=False, flags=re.IGNORECASE)
     def listen_for_talk_of_cookies(self, msg, match):
         """Talk of cookies gives Errbot a craving..."""
+        if ptvsd.is_attached():
+            # print("Debug Start")
+            ptvsd.break_into_debugger()
         return "Somebody mentioned cookies? Om nom nom!"
 
-    @botcmd
-    def git(self, msg, args):
+    @arg_botcmd('command', type=str)
+    def git(self, msg, command, *args):
+        """git <command>"""
         if ptvsd.is_attached():
-            print("Debug Start")
+            # print("Debug Start")
             ptvsd.break_into_debugger()
-        git_result = self.git_run(None, args)
-        if git_result:
-            return dict(git_run=f"{git_result.decode('utf-8')}")
-        else:
-            return {'version': VERSION}
+        git_result = self.git_run(command, args)
+        return dict(git_run=f"{git_result.decode('utf-8')}")
 
     @staticmethod
     def hello_helper():

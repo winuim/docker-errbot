@@ -1,3 +1,4 @@
+ptvsd
 errbot
 slackclient
-ptvsd
+gitpython

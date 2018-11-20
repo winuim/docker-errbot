@@ -11,6 +11,7 @@ docker-compose*
 README.md
 LICENSE
 .vscode
-srv/plugins/*/
 .pytest_cache
 *.pyc
+srv/*
+!srv/config.py

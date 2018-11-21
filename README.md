@@ -3,6 +3,7 @@
 ## Build image
 ```
 docker build ./ -t errbot
+docker image prune
 ```
 
 ## Errbot start. Backend Text mode

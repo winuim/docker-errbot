@@ -242,7 +242,7 @@ BOT_ALT_PREFIXES = tuple(
 #
 # Note: There's no need to add spaces to the separators here
 #
-#BOT_ALT_PREFIX_SEPARATORS = (':', ',', ';')
+BOT_ALT_PREFIX_SEPARATORS = (':', ',', ';')
 
 # Continuing on this theme, you might want to permit your users to be
 # lazy and not require correct capitalization, so they can do 'Err',

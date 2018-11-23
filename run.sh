@@ -1,7 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ -e /app/srv/plugins/ ]; then
-  cp -r /app/srv/plugins/* /app/errbot-root/plugins/
+if [[ -e /app/srv/plugins/ ]]; then
+  for dir_name in `ls -l /app/srv/plugins/ | awk '$1 ~ /d/ {print $9}'`; do
+      if [[ -e /app/srv/plugins/$dir_name ]]; then
+          if [[ ! -L /app/plugins/$dir_name ]]; then
+              ln -s /app/srv/plugins/$dir_name /app/plugins/
+          fi
+      fi
+  done
 fi
 
 while :

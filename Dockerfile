@@ -25,4 +25,4 @@ RUN apt update && apt install -y \
     && errbot --init
 
 # Run
-CMD ["sh", "run.sh"]
+CMD ["bash", "run.sh"]

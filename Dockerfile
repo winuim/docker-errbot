@@ -1,34 +1,28 @@
-FROM ubuntu:latest AS build-env
-
-WORKDIR /root
-ADD . /root
-
-RUN apt update && apt upgrade -y \
-    && apt install python3-pip -y \
-    && python3 -m pip install -r requirements.txt --user
-
-
 FROM ubuntu:latest
 
-COPY --from=build-env /root/.cache /root/.cache
-COPY --from=build-env /root/.local /root/.local
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Tokyo
+ENV LANG=en_US.UTF-8
 
 WORKDIR /app
-ADD . /app
-
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Tokyo
-ENV LC_ALL=en_US.UTF-8
+COPY . /app
+RUN find . -type f -exec chmod -x {} \;
 
 # Update & Install Requirments Packages.
-RUN apt update && apt upgrade -y \
-    && apt install tzdata locales sudo curl openssh-client git python3 python3-setuptools python3-six python3-idna -y \
-    && curl https://bootstrap.pypa.io/get-pip.py | python3 \
-    && find . -type f -exec chmod -x {} \; \
+RUN apt update && apt install -y \
+    curl \
+    git \
+    locales \
+    openssh-client \
+    python3 \
+    python3-setuptools \
+    tzdata \
+    && rm -rf /var/lib/apt/lists/* \
     && locale-gen en_US.UTF-8 \
-    && echo "PATH=$PATH:~/.local/bin" >> ~/.bashrc \
-    && mkdir /app/errbot-root && cd /app/errbot-root && ~/.local/bin/errbot --init \
-    && curl https://krypt.co/kr | sh
+    && curl https://bootstrap.pypa.io/get-pip.py | python3 \
+    && python3 -m pip install -r requirements.txt \
+    && rm -rf ~/.cache \
+    && errbot --init
 
 # Run
 CMD ["sh", "run.sh"]

@@ -63,7 +63,7 @@ BACKEND = os.environ.get('BACKEND', 'Text')
 
 # The location where all of Err's data should be stored. Make sure to set
 # this to a directory that is writable by the user running the bot.
-BOT_DATA_DIR = '/app/errbot-root/data'
+BOT_DATA_DIR = '/app/data'
 
 ### Repos and plugins config.
 
@@ -82,7 +82,7 @@ BOT_DATA_DIR = '/app/errbot-root/data'
 # locally before publishing it. Note that you can specify only a single
 # directory, however you are free to create subdirectories with multiple
 # plugins inside this directory.
-BOT_EXTRA_PLUGIN_DIR = os.environ.get('BOT_EXTRA_PLUGIN_DIR', '/app/errbot-root/plugins')
+BOT_EXTRA_PLUGIN_DIR = os.environ.get('BOT_EXTRA_PLUGIN_DIR', '/app/plugins')
 
 # If you use an external backend as a plugin,
 # this is where you tell Errbot where to find it.
@@ -111,7 +111,7 @@ PLUGINS_CALLBACK_ORDER = (None, )
 
 # The location of the log file. If you set this to None, then logging will
 # happen to console only.
-BOT_LOG_FILE = '/app/errbot-root/errbot.log'
+BOT_LOG_FILE = '/app/errbot.log'
 
 # The verbosity level of logging that is done to the above logfile, and to
 # the console. This takes the standard Python logging levels, DEBUG, INFO,
@@ -144,7 +144,7 @@ BOT_IDENTITY = {}
 
 #slack token
 if 'BOT_TOKEN' in os.environ:
-    BOT_IDENTITY['token'] = os.environ.get('BOT_TOKEN') 
+    BOT_IDENTITY['token'] = os.environ.get('BOT_TOKEN')
 
 # The identity, or credentials, used to connect to a server
 # BOT_IDENTITY = {
@@ -191,7 +191,7 @@ if 'BOT_TOKEN' in os.environ:
 #
 # Unix-style glob patterns are supported, so 'gbin@localhost'
 # would be considered an admin if setting '*@localhost'.
-BOT_ADMINS = tuple(os.environ.get('BOT_ADMINS', '@winuim').split(','),)
+BOT_ADMINS = tuple(os.environ.get('BOT_ADMINS', '@winuim').split(','), )
 
 # Set of admins that wish to receive administrative bot notifications.
 #BOT_ADMINS_NOTIFICATIONS = ()
@@ -231,7 +231,8 @@ BOT_PREFIX = os.environ.get('BOT_PREFIX', '!')
 # names, rather than the BOT_PREFIX above. This option allows you to
 # specify alternative prefixes the bot will respond to in addition to
 # the prefix above.
-BOT_ALT_PREFIXES = tuple(os.environ.get('BOT_ALT_PREFIXES', '@errbot').split(','),)
+BOT_ALT_PREFIXES = tuple(
+    os.environ.get('BOT_ALT_PREFIXES', '@errbot').split(','), )
 
 # If you use alternative prefixes, you might want to allow users to insert
 # separators like , and ; between the prefix and the command itself. This
@@ -373,8 +374,8 @@ REVERSE_CHATROOM_RELAY = {}
 #IRC_CHANNEL_RATE = 1  # Regular channel messages
 #IRC_PRIVATE_RATE = 1  # Private messages
 #IRC_RECONNECT_ON_KICK = 5  # Reconnect back to a channel after a kick (in seconds)
-                            # Put it at None if you don't want the chat to
-                            # reconnect
+# Put it at None if you don't want the chat to
+# reconnect
 #IRC_RECONNECT_ON_DISCONNECT = 5  # Reconnect back to a channel after a disconenction (in seconds)
 
 # The pattern to build a user representation from for ACL matches.

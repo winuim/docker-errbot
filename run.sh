@@ -1,16 +1,14 @@
 #!/bin/sh
 
-if [ -e /app/srv ]; then
-  cp -r /app/srv/* /app/errbot-root/
+if [ -e /app/srv/plugins/ ]; then
+  cp -r /app/srv/plugins/* /app/errbot-root/plugins/
 fi
-
-cd /app/errbot-root
 
 while :
 do
     case "$1" in
       -d | --debug)
-      python3 /app/errbot-debug.py
+      python3 /app/errbot-debug.py -c /app/srv/config.py
       break
       ;;
       -*)
@@ -18,7 +16,7 @@ do
       exit 1
       ;;
       *)  # No more options
-      errbot
+      errbot -c /app/srv/config.py
       break
       ;;
     esac

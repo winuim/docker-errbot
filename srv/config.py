@@ -44,7 +44,7 @@ import os
 # 'XMPP'     - the Extensible Messaging and Presence Protocol (https://xmpp.org/)
 # 'Telegram' - cloud-based mobile and desktop messaging app with a focus
 #              on security and speed. (https://telegram.org/)
-BACKEND = os.environ.get('BACKEND', 'Text')
+BACKEND = os.environ.get('BACKEND', 'Slack')
 
 # STORAGE selection.
 # This configures the type of persistence you wish to use Errbot with.
@@ -143,8 +143,8 @@ SENTRY_LOGLEVEL = BOT_LOG_LEVEL
 BOT_IDENTITY = {}
 
 #slack token
-if 'BOT_TOKEN' in os.environ:
-    BOT_IDENTITY['token'] = os.environ.get('BOT_TOKEN')
+if 'SLACK_BOT_TOKEN' in os.environ:
+    BOT_IDENTITY['token'] = os.environ.get('SLACK_BOT_TOKEN')
 
 # The identity, or credentials, used to connect to a server
 # BOT_IDENTITY = {

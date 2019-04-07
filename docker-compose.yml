@@ -1,8 +1,13 @@
 version: '2.1'
 
 services:
-  docker-errbot:
-    image: docker-errbot
-    build: .
+  errbot:
+    image: errbot:alpine
+    build: 
+      context: .
     ports:
-      - 3000:3000
+      - 5678:5678
+    environment:
+      - SLACK_BOT_TOKEN
+    stdin_open: true
+    tty: true

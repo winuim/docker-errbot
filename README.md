@@ -5,19 +5,12 @@
 docker build ./ -t errbot
 ```
 
-## Errbot start. Backend Text mode
+## Errbot start
 ```
 docker run --rm -it errbot
 ```
 
-## Bash start. and errbot start.
+## Errbot start with local config file
 ```
-docker run --rm -it errbot bash
-sh run.sh
-```
-
-## Develop mode errbot start.
-```
-docker run --rm -it -v $(pwd)/srv:/app/srv -p 5678:5678 errbot bash
-sh run.sh -d
+docker run --rm -it -v $(pwd)/srv:/app/srv -p 5678:5678 errbot
 ```

@@ -44,6 +44,27 @@ class GitBot(BotPlugin):
         """git getDir"""
         return self._git_dirname
 
+    @arg_botcmd('--all', dest='opt_all', action='store_true')
+    def git_branch(self, msg, opt_all):
+        """git branch"""
+        repo_path, _err = self.get_repo_path(self._git_dirname)
+        if _err:
+            return _err
+
+        repo = git.Repo(repo_path)
+        ret = []
+        for item in repo.branches:
+            if repo.active_branch == item:
+                ret.append(f"* {item}\n")
+            else:
+                ret.append(f"  {item}\n")
+        if opt_all:
+            for item in repo.remotes.origin.refs:
+                remote_path = re.sub('^refs/', '', item.path)
+                ret.append(f"  {remote_path} -> {item.name}\n")
+
+        return '\n'.join(ret)
+
     @arg_botcmd('url', type=str)
     def git_clone(self, msg, url):
         """git clone url"""
@@ -52,7 +73,7 @@ class GitBot(BotPlugin):
         repo_path = os.path.join(self.CONFIG_TEMPLATE['GIT_WORKDIR'],
                                  self._git_dirname)
         if os.path.exists(repo_path):
-            return f"{dirname} exists."
+            return f"{self._git_dirname} don't exists."
 
         repo = git.Repo.clone_from(
             url,
@@ -64,39 +85,13 @@ class GitBot(BotPlugin):
     @arg_botcmd('user_name', type=str)
     def git_config(self, msg, user_name, user_email):
         """git config"""
-        repo_path = os.path.join(self.CONFIG_TEMPLATE['GIT_WORKDIR'],
-                                 self._git_dirname)
-        if not os.path.exists(repo_path):
-            return f"{dirname} don't exists."
+        repo_path, _err = self.get_repo_path(self._git_dirname)
+        if _err:
+            return _err
 
         repo = git.Repo(repo_path)
         repo.config_writer().set_value('user', 'name', user_name).release()
         repo.config_writer().set_value('user', 'email', user_email).release()
-
-    @arg_botcmd('--all', dest='opt_all', action='store_true')
-    def git_branch(self, msg, opt_all):
-        """git branch"""
-        if self._git_dirname is None:
-            return "needs to git_setDir."
-        repo_path = os.path.join(self.CONFIG_TEMPLATE['GIT_WORKDIR'],
-                                 self._git_dirname)
-        if not os.path.exists(repo_path):
-            return f"{dirname} don't exists."
-
-        repo = git.Repo(repo_path)
-        _active_branch = repo.active_branch
-        ret = []
-        for item in repo.branches:
-            if _active_branch == item:
-                ret.append(f"* {item}\n")
-            else:
-                ret.append(f"  {item}\n")
-        if opt_all:
-            for item in repo.remotes.origin.refs:
-                remote_path = re.sub('^refs/', '', item.path)
-                ret.append(f"  {remote_path} -> {item.name}\n")
-
-        return '\n'.join(ret)
 
     @botcmd(admin_only=True)
     def cmd(self, msg, args):
@@ -115,3 +110,12 @@ class GitBot(BotPlugin):
         tags, _err = cmd_call.communicate()
         return_code = cmd_call.returncode
         return f"return_code={return_code}\n{command}\n{tags.decode('utf-8')}\n"
+
+    def get_repo_path(self, dir_name):
+        if dir_name is None:
+            return None, "needs to dir_name"
+        repo_path = os.path.join(self.CONFIG_TEMPLATE['GIT_WORKDIR'], dir_name)
+        if not os.path.exists(repo_path):
+            return None, f"{dir_name} don't exists."
+
+        return repo_path, None

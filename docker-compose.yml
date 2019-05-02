@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   errbot:
-    image: errbot:alpine
+    image: winuim/errbot
     build: 
       context: .
     environment:

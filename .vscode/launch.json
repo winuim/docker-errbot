@@ -19,8 +19,8 @@
             "host": "localhost",
             "pathMappings": [
                 {
-                    "localRoot": "${workspaceFolder}/srv",
-                    "remoteRoot": "/app/srv"
+                    "localRoot": "${workspaceFolder}/plugins",
+                    "remoteRoot": "/app/plugins"
                 }
             ]
         },

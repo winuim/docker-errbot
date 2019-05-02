@@ -7,7 +7,7 @@ case ${1} in
         errbot -c srv/config.py
         ;;
     debug)
-        python -m ptvsd --host localhost --port 5678 --wait /usr/local/bin/errbot -c srv/config.py
+        python -m ptvsd --host 0.0.0.0 --port 5678 --wait /usr/local/bin/errbot -c srv/config.py
         ;;
     *)
         exec "$@"

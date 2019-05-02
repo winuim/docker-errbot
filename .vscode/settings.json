@@ -1,4 +1,10 @@
 {
     "python.pythonPath": "/usr/local/bin/python3",
     "python.linting.pylintEnabled": true,
+    "python.testing.pyTestArgs": [
+        "plugins"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pyTestEnabled": true,
 }

@@ -6,6 +6,7 @@ services:
     build: 
       context: .
     environment:
+      - DEBUG=true
       - BACKEND=Text
       - BOT_ADMINS=@winuim
       - SLACK_BOT_TOKEN
@@ -15,3 +16,5 @@ services:
       - 5678:5678
     command:
       - "debug"
+    volumes:
+      - ./plugins:/app/plugins:ro

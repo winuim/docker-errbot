@@ -5,9 +5,9 @@ services:
     image: errbot:alpine
     build: 
       context: .
-    ports:
-      - 5678:5678
     environment:
+      - BACKEND=Slack
+      - BOT_ADMINS=@winuim
       - SLACK_BOT_TOKEN
     stdin_open: true
     tty: true

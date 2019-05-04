@@ -1,35 +1,34 @@
-FROM python:alpine AS build-env
-WORKDIR /root
-COPY requirements.txt /root
-# Update & Install Requirments Packages.
-RUN apk update && apk add \
+FROM python:alpine
+LABEL maintainer="Yohei Uema <winuim@gmail.com>"
+WORKDIR /app
+COPY . /app
+# Install Requirments Packages.
+RUN apk add --no-cache --virtual .build-deps \
     gcc \
     libffi-dev \
     musl-dev \
     openssl-dev \
-    tzdata \
-    && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
-    && echo "Asia/Tokyo" > /etc/timezone \
-    && python -m pip install -r requirements.txt
-
-
-FROM python:alpine
-LABEL maintainer="Yohei Uema <winuim@gmail.com>"
-WORKDIR /app
-COPY --from=build-env /etc/localtime /etc/localtime
-COPY --from=build-env /etc/timezone /etc/timezone
-COPY --from=build-env /usr/local/bin /usr/local/bin
-COPY --from=build-env /usr/local/lib/python3.7/site-packages /usr/local/lib/python3.7/site-packages
-COPY srv /app/srv
-COPY entrypoint.sh /app/entrypoint.sh
-RUN find /app -type f -exec chmod -x {} \;
-RUN apk update && apk add \
+    && : Install pip packages \
+    && python -m pip install -r requirements.txt \
+    && : Delete build-deps packages \
+    && apk del --purge .build-deps \
+    && : Delete pip cache files \
+    && rm -rf /root/.cache
+# Install minimal Packages, and Setup App.
+RUN apk add --no-cache \
     bash \
     shadow \
-    && rm -rf /var/cache/apk/* \
+    tzdata \
+    && : Setup timezone \
+    && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+    && echo "Asia/Tokyo" > /etc/timezone \
+    && : Setup user \
     && groupadd -r errbot && useradd -m -r -g errbot errbot \
+    && : Setup errbot \
     && errbot --init \
+    && : Change owner and group \
     && chown -R errbot:errbot /app \
+    && : Change permission  \
     && chmod +x entrypoint.sh
 
 # Run

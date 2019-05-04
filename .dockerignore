@@ -13,5 +13,4 @@ LICENSE
 .vscode
 .pytest_cache
 *.pyc
-srv/*
-!srv/config.py
+plugins

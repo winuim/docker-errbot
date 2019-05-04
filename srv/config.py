@@ -171,7 +171,7 @@ BOT_IDENTITY = {
     # 'endpoint': 'https://api.hipchat.com'
 
     ## Slack mode (comment the others above if using this mode)
-    'token': os.environ.get('ERRBOT_SLACK_TOKEN'),
+    'token': os.environ.get('BOT_SLACK_TOKEN'),
     ## you can also include the proxy for the SlackClient connection
     # 'proxies': {'http': 'some-http-proxy', 'https': 'some-https-proxy'}
 
@@ -240,7 +240,7 @@ BOT_ADMINS = tuple(os.environ.get('BOT_ADMINS', '@admin').split(','), )
 # specify alternative prefixes the bot will respond to in addition to
 # the prefix above.
 BOT_ALT_PREFIXES = tuple(
-    os.environ.get('BOT_ALT_PREFIXES', '@errbot').split(','), )
+    os.environ.get('BOT_ALT_PREFIXES', 'Err').split(','), )
 
 # If you use alternative prefixes, you might want to allow users to insert
 # separators like , and ; between the prefix and the command itself. This

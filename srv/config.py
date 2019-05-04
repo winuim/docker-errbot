@@ -44,6 +44,7 @@ import os
 # 'XMPP'     - the Extensible Messaging and Presence Protocol (https://xmpp.org/)
 # 'Telegram' - cloud-based mobile and desktop messaging app with a focus
 #              on security and speed. (https://telegram.org/)
+
 BACKEND = os.environ.get('BACKEND', 'Text')
 
 # STORAGE selection.
@@ -82,7 +83,7 @@ BOT_DATA_DIR = '/app/data'
 # locally before publishing it. Note that you can specify only a single
 # directory, however you are free to create subdirectories with multiple
 # plugins inside this directory.
-BOT_EXTRA_PLUGIN_DIR = os.environ.get('BOT_EXTRA_PLUGIN_DIR', '/app/plugins')
+BOT_EXTRA_PLUGIN_DIR = '/app/plugins'
 
 # If you use an external backend as a plugin,
 # this is where you tell Errbot where to find it.
@@ -109,9 +110,15 @@ PLUGINS_CALLBACK_ORDER = (None, )
 # the user running Err.
 #AUTOINSTALL_DEPS = True
 
+# To use your own custom log formatter, uncomment and set BOT_LOG_FORMATTER
+# to your formatter instance (inherits from logging.Formatter)
+#   For information on how to create a logging formatter and what it can do, see
+#   https://docs.python.org/3.5/library/logging.html#formatter-objects
+# BOT_LOG_FORMATTER =
+
 # The location of the log file. If you set this to None, then logging will
 # happen to console only.
-BOT_LOG_FILE = '/app/errbot.log'
+BOT_LOG_FILE = BOT_DATA_DIR + '/err.log'
 
 # The verbosity level of logging that is done to the above logfile, and to
 # the console. This takes the standard Python logging levels, DEBUG, INFO,
@@ -120,13 +127,17 @@ BOT_LOG_FILE = '/app/errbot.log'
 # If you encounter any issues with Err, please set your log level to
 # logging.DEBUG and attach a log with your bug report to aid the developers
 # in debugging the issue.
-BOT_LOG_LEVEL = logging.getLevelName(os.environ.get('BOT_LOG_LEVEL', 'DEBUG'))
+BOT_LOG_LEVEL = logging.getLevelName(os.environ.get('BOT_LOG_LEVEL', 'INFO'))
 
 # Enable logging to sentry (find out more about sentry at www.getsentry.com).
 # This is optional and disabled by default.
 BOT_LOG_SENTRY = False
 SENTRY_DSN = ''
 SENTRY_LOGLEVEL = BOT_LOG_LEVEL
+
+# Set an optional Sentry transport other than the default Threaded.
+# For more info, see https://docs.sentry.io/clients/python/transports/
+# SENTRY_TRANSPORT = ('RequestsHTTPTransport', 'raven.transport.requests')
 
 # Execute commands in asynchronous mode. In this mode, Errbot will spawn 10
 # separate threads to handle commands, instead of blocking on each
@@ -140,51 +151,48 @@ SENTRY_LOGLEVEL = BOT_LOG_LEVEL
 # Account and chatroom (MUC) configuration                               #
 ##########################################################################
 
-BOT_IDENTITY = {}
-
-#slack token
-if 'SLACK_BOT_TOKEN' in os.environ:
-    BOT_IDENTITY['token'] = os.environ.get('SLACK_BOT_TOKEN')
-
 # The identity, or credentials, used to connect to a server
-#BOT_IDENTITY = {
-# XMPP (Jabber) mode
-# 'username': 'err@localhost',  # The JID of the user you have created for the bot
-# 'password': 'changeme',       # The corresponding password for this user
-# 'server': ('host.domain.tld',5222), # server override
+BOT_IDENTITY = {
+    # XMPP (Jabber) mode
+    # 'username':
+    # 'err@localhost',  # The JID of the user you have created for the bot
+    # 'password': 'changeme',  # The corresponding password for this user
+    # 'server': ('host.domain.tld',5222), # server override
 
-## HipChat mode (Comment the above if using this mode)
-# 'username' : '12345_123456@chat.hipchat.com',
-# 'password' : 'changeme',
-## Group admins can create/view tokens on the settings page after logging
-## in on HipChat's website
-# 'token'    : 'ed4b74d62833267d98aa99f312ff04',
-## If you're using HipChat server (self-hosted HipChat) then you should set
-## the endpoint below. If you don't use HipChat server but use the hosted version
-## of HipChat then you may leave this commented out.
-# 'endpoint' : 'https://api.hipchat.com'
+    ## HipChat mode (Comment the above if using this mode)
+    # 'username': '12345_123456@chat.hipchat.com',
+    # 'password': 'changeme',
+    ## Group admins can create/view tokens on the settings page after logging
+    ## in on HipChat's website
+    # 'token': 'ed4b74d62833267d98aa99f312ff04',
+    ## If you're using HipChat server (self-hosted HipChat) then you should set
+    ## the endpoint below. If you don't use HipChat server but use the hosted version
+    ## of HipChat then you may leave this commented out.
+    # 'endpoint': 'https://api.hipchat.com'
 
-## Slack mode (comment the others above if using this mode)
-# 'token': 'xoxb-4426949411-aEM7...',
+    ## Slack mode (comment the others above if using this mode)
+    'token': os.environ.get('ERRBOT_SLACK_TOKEN'),
+    ## you can also include the proxy for the SlackClient connection
+    # 'proxies': {'http': 'some-http-proxy', 'https': 'some-https-proxy'}
 
-## Telegram mode (comment the others above if using this mode)
-# 'token': '103419016:AAbcd1234...',
+    ## Telegram mode (comment the others above if using this mode)
+    # 'token': '103419016:AAbcd1234...',
 
-## IRC mode (Comment the others above if using this mode)
-# 'nickname' : 'err-chatbot',
-# 'username' : 'err-chatbot',    # optional, defaults to nickname if omitted
-# 'password' : None,             # optional
-# 'server' : 'irc.freenode.net',
-# 'port': 6667,                  # optional
-# 'ssl': False,                  # optional
-# 'ipv6': False,                 # optional
-# 'nickserv_password': None,     # optional
-## Optional: Specify an IP address or hostname (vhost), and a
-## port, to use when making the connection. Leave port at 0
-## if you have no source port preference.
-##    example: 'bind_address': ('my-errbot.io', 0)
-# 'bind_address': ('localhost', 0),
-#}
+    ## IRC mode (Comment the others above if using this mode)
+    # 'nickname': 'err-chatbot',
+    # 'username': 'err-chatbot',    # optional, defaults to nickname if omitted
+    # 'password': None,             # optional
+    # 'server': 'irc.freenode.net',
+    # 'port': 6667,                  # optional
+    # 'ssl': False,                  # optional
+    # 'ipv6': False,                 # optional
+    # 'nickserv_password': None,     # optional
+    ## Optional: Specify an IP address or hostname (vhost), and a
+    ## port, to use when making the connection. Leave port at 0
+    ## if you have no source port preference.
+    ##    example: 'bind_address': ('my-errbot.io', 0)
+    # 'bind_address': ('localhost', 0),
+}
 
 # Set the admins of your bot. Only these users will have access
 # to the admin-only commands.
@@ -207,7 +215,7 @@ BOT_ADMINS = tuple(os.environ.get('BOT_ADMINS', '@admin').split(','), )
 # implementations, notably HipChat, are very picky about what name you
 # use. In the case of HipChat, make sure this matches exactly with the
 # name you gave the user.
-CHATROOM_FN = os.environ.get('CHATROOM_FN', 'errbot')
+# CHATROOM_FN = 'Errbot'
 
 ##########################################################################
 # Prefix configuration                                                   #
@@ -220,7 +228,7 @@ CHATROOM_FN = os.environ.get('CHATROOM_FN', 'errbot')
 # If the prefix is changed from the default, the help strings will be
 # automatically adjusted for you.
 #
-BOT_PREFIX = os.environ.get('BOT_PREFIX', '!')
+# BOT_PREFIX = '!'
 #
 # Uncomment the following and set it to True if you want the prefix to be
 # optional for normal chat.
@@ -242,7 +250,7 @@ BOT_ALT_PREFIXES = tuple(
 #
 # Note: There's no need to add spaces to the separators here
 #
-BOT_ALT_PREFIX_SEPARATORS = (':', ',', ';')
+#BOT_ALT_PREFIX_SEPARATORS = (':', ',', ';')
 
 # Continuing on this theme, you might want to permit your users to be
 # lazy and not require correct capitalization, so they can do 'Err',
@@ -376,7 +384,7 @@ REVERSE_CHATROOM_RELAY = {}
 #IRC_RECONNECT_ON_KICK = 5  # Reconnect back to a channel after a kick (in seconds)
 # Put it at None if you don't want the chat to
 # reconnect
-#IRC_RECONNECT_ON_DISCONNECT = 5  # Reconnect back to a channel after a disconenction (in seconds)
+#IRC_RECONNECT_ON_DISCONNECT = 5  # Reconnect back to a channel after a disconnection (in seconds)
 
 # The pattern to build a user representation from for ACL matches.
 # The default is "{nick}!{user}@{host}" which results in "zoni!zoni@ams1.groenen.me"

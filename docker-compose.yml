@@ -8,6 +8,6 @@ services:
     environment:
       - BACKEND=Slack
       - BOT_ADMINS=@winuim
-      - SLACK_BOT_TOKEN
+      - ERRBOT_SLACK_TOKEN
     stdin_open: true
     tty: true

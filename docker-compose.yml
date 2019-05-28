@@ -7,7 +7,7 @@ services:
       context: .
     environment:
       - BACKEND=Slack
-      - BOT_LOG_LEVEL=DEBUG
+      - BOT_LOG_LEVEL=INFO
       - BOT_SLACK_TOKEN
       - BOT_ADMINS=@winuim
       - BOT_ALT_PREFIXES=@errbot

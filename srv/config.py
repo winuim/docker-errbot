@@ -108,7 +108,7 @@ PLUGINS_CALLBACK_ORDER = (None, )
 # If no virtualenv is detected, the equivalent of `pip install --user -r
 # requirements.txt` is used to ensure the package(s) is/are only installed for
 # the user running Err.
-#AUTOINSTALL_DEPS = True
+AUTOINSTALL_DEPS = True
 
 # To use your own custom log formatter, uncomment and set BOT_LOG_FORMATTER
 # to your formatter instance (inherits from logging.Formatter)

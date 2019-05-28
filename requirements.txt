@@ -1,4 +1,4 @@
 ptvsd
 errbot
-slackclient
+slackclient==2.0.0
 websocket-client
